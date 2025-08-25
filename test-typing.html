@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Typing Animation Test</title>
+    <style>
+        body {
+            background: #0a0a0a;
+            color: white;
+            font-family: 'Inter', sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+        .container {
+            text-align: center;
+        }
+        .typing-container {
+            font-size: 2rem;
+            margin: 20px 0;
+        }
+        .prefix {
+            color: #ffffff;
+        }
+        .dynamic {
+            color: #64ffda;
+            font-weight: 600;
+            min-width: 300px;
+            display: inline-block;
+            text-align: left;
+        }
+        .cursor {
+            color: #64ffda;
+            animation: blink 0.5s infinite;
+        }
+        @keyframes blink {
+            0%, 50% { opacity: 1; }
+            51%, 100% { opacity: 0; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Typing Animation Test</h1>
+        <div class="typing-container">
+            <span class="prefix">I'm a </span>
+            <span class="dynamic" id="typing-text"></span>
+            <span class="cursor">|</span>
+        </div>
+        <p>Testing the typing animation logic</p>
+    </div>
+
+    <script>
+        const titles = [
+            'Full Stack Developer',
+            'Frontend Specialist',
+            'UI/UX Enthusiast',
+            'Problem Solver'
+        ];
+        
+        let currentIndex = 0;
+        let displayText = '';
+        let isDeleting = false;
+        let isInitialized = false;
+        
+        const typingElement = document.getElementById('typing-text');
+        
+        function updateDisplay() {
+            typingElement.textContent = displayText;
+        }
+        
+        function typeAnimation() {
+            if (!isInitialized) {
+                isInitialized = true;
+                setTimeout(() => {
+                    displayText = titles[0].substring(0, 1);
+                    updateDisplay();
+                    setTimeout(typeAnimation, 80);
+                }, 500);
+                return;
+            }
+            
+            const currentTitle = titles[currentIndex];
+            
+            if (!isDeleting && displayText === currentTitle) {
+                // Finished typing, start deleting after pause
+                setTimeout(() => {
+                    isDeleting = true;
+                    typeAnimation();
+                }, 1500);
+            } else if (isDeleting && displayText === '') {
+                // Finished deleting, move to next title
+                isDeleting = false;
+                currentIndex = (currentIndex + 1) % titles.length;
+                setTimeout(typeAnimation, 80);
+            } else {
+                // Typing or deleting
+                const typingSpeed = isDeleting ? 30 : 80;
+                
+                if (isDeleting) {
+                    displayText = currentTitle.substring(0, displayText.length - 1);
+                } else {
+                    displayText = currentTitle.substring(0, displayText.length + 1);
+                }
+                
+                updateDisplay();
+                setTimeout(typeAnimation, typingSpeed);
+            }
+        }
+        
+        // Start the animation
+        typeAnimation();
+    </script>
+</body>
+</html>
