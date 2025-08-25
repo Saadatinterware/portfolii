@@ -1,0 +1,86 @@
+.cursor-follower,
+.cursor-trail {
+  position: fixed;
+  top: 0;
+  left: 0;
+  pointer-events: none;
+  z-index: 9998;
+  border-radius: 50%;
+  mix-blend-mode: difference;
+  transition: all 0.3s ease;
+}
+
+.cursor-follower {
+  width: 20px;
+  height: 20px;
+  background: var(--primary-color);
+  box-shadow: 
+    0 0 20px var(--primary-color),
+    0 0 40px var(--primary-color);
+}
+
+.cursor-follower.hovering {
+  background: rgba(100, 255, 218, 0.8);
+  box-shadow: 
+    0 0 30px var(--primary-color),
+    0 0 60px var(--primary-color);
+}
+
+.cursor-follower.clicking {
+  background: var(--secondary-color);
+  box-shadow: 
+    0 0 25px var(--secondary-color),
+    0 0 50px var(--secondary-color);
+}
+
+.cursor-trail {
+  width: 40px;
+  height: 40px;
+  background: rgba(100, 255, 218, 0.2);
+  border: 1px solid rgba(100, 255, 218, 0.3);
+}
+
+.cursor-trail.hovering {
+  background: rgba(100, 255, 218, 0.3);
+  border: 1px solid rgba(100, 255, 218, 0.5);
+  transform: scale(1.2);
+}
+
+/* Hide default cursor on desktop */
+@media (min-width: 769px) {
+  body, 
+  a, 
+  button, 
+  input, 
+  textarea,
+  select,
+  .cursor-hover {
+    cursor: none !important;
+  }
+}
+
+/* Hide custom cursor on mobile/tablet */
+@media (max-width: 768px) {
+  .cursor-follower,
+  .cursor-trail {
+    display: none;
+  }
+}
+
+/* Special cursor states for specific elements */
+body.cursor-text .cursor-follower {
+  background: var(--accent-color);
+  transform: scale(0.8);
+}
+
+body.cursor-grab .cursor-follower {
+  background: var(--secondary-color);
+  border-radius: 30%;
+}
+
+/* Smooth animations for performance */
+.cursor-follower,
+.cursor-trail {
+  will-change: transform;
+  backface-visibility: hidden;
+}
